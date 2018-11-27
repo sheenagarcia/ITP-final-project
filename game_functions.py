@@ -15,11 +15,16 @@ def check_events():
             if event.key == pygame.K_RIGHT:
                 #move mermaid to the right
                 mermaid.moving_right = True
-        #program then responds again when key is unpressed
+            #check if key is left arrow key
+            elif event.key == pygame.K_LEFT:
+                #move mermaid to the left
+                mermaid.moving_left = True
+        #program then responds again when key is unpressed to stop moving mermaid
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT:
-                #stop moving mermaid
                 mermaid.moving_right = False
+            elif event.key == pygame.K_LEFT:
+                mermaid.moving_left = False
 
 #update_screen function allows for further simplification of run_game
 def update_screen(ai_settings, screen, mermaid):
