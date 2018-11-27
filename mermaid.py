@@ -15,6 +15,15 @@ class Mermaid():
         self.rect.centerx = self.screen_rect.centerx
         self.rect.bottom = self.screen_rect.bottom
 
+        #movement flag; set to false initially
+        self.moving_right = False
+
+    #however, we add the update function based on the mvt flag that will move the mermaid +1 to the right if True
+    def update(self):
+        """Update mermaid position based on mvt flag"""
+        if self.moving_right:
+            self.rect.centerx += 1
+
     def blitme(self):
         """Draw the mermaid at its current location"""
         self.screen.blit(self.image, self.rect)
