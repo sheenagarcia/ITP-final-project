@@ -88,7 +88,7 @@ def check_keyup_events (event, mermaid):
         mermaid.moving_left = False
 
 
-def check_events(ai_settings, screen, stats, play_button, mermaid, fishes, bubbles):
+def check_events(ai_settings, screen, stats, sb, play_button, mermaid, fishes, bubbles):
     """Respond to keypresses and mouse events"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -99,16 +99,22 @@ def check_events(ai_settings, screen, stats, play_button, mermaid, fishes, bubbl
             check_keyup_events(event, mermaid)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            check_play_button(ai_settings, screen, stats, play_button, mermaid, fishes, bubbles, mouse_x, mouse_y)
+            check_play_button(ai_settings, screen, stats, sb, play_button, mermaid, fishes, bubbles, mouse_x, mouse_y)
 
-def check_play_button(ai_settings, screen, stats, play_button, mermaid, fishes, bubbles, mouse_x, mouse_y):
+def check_play_button(ai_settings, screen, stats, sb, play_button, mermaid, fishes, bubbles, mouse_x, mouse_y):
     """Start a new game when player clicks button"""
     button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y) #stores True / False value
     if button_clicked and not stats.game_active: #restricts to mouse clicks on play button
         ai_settings.initialize_dynamic_settings() #reset game settings
         pygame.mouse.set_visible(False) #hide mouse cursor
-        stats.reset_stats() #reset game stats
+
+        #Reset game stats
+        stats.reset_stats()
         stats.game_active = True
+
+        #Reset scoreboard images
+        sb.prep_score()
+        sb.prep_level()
 
         #Empty list of fish and bubbles
         fishes.empty()
@@ -132,6 +138,10 @@ def check_bubble_fish_collision(ai_settings, screen, stats, sb, mermaid, fishes,
         bubbles.empty()
         ai_settings.increase_speed() #causes everything to speed up as you progress
         create_school(ai_settings, screen, mermaid, fishes)
+
+        #Increase level
+        stats.level += 1
+        sb.prep_level()
 
 def mermaid_hit(ai_settings, stats, screen, mermaid, fishes, bubbles):
     """Respond to mermaid being hit by fish"""

@@ -14,3 +14,4 @@ class GameStats():
         """Initialize statistics that can change during the game"""
         self.mermaids_left = self.ai_settings.mermaid_limit
         self.score = 0 #to reset each time, put it under this function instead of __init__
+        self.level = 1
