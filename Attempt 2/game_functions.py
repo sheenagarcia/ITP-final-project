@@ -88,13 +88,13 @@ def check_keyup_events (event, mermaid):
         mermaid.moving_left = False
 
 
-def check_events(ai_settings, screen, mermaid, bubbles):
+def check_events(ai_settings, screen, stats, play_button, mermaid, bubbles):
     """Respond to keypresses and mouse events"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            check_keydown_events(event, ai_settings, stats, play_button, screen, mermaid, bubbles)
+            check_keydown_events(event, ai_settings, screen, mermaid, bubbles)
         elif event.type == pygame.KEYUP:
             check_keyup_events(event, mermaid)
         elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -132,7 +132,7 @@ def mermaid_hit(ai_settings, stats, screen, mermaid, fishes, bubbles):
     else:
         stats.game_active = False
 
-def update_screen(ai_settings, screen, mermaid, fishes, bubbles):
+def update_screen(ai_settings, screen, stats, mermaid, fishes, bubbles, play_button):
     """Update images on screen and flip to new screen"""
     #Redraw screen during each loop iteration
     screen.fill(ai_settings.bg_colour)

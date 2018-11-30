@@ -1,4 +1,4 @@
-import pygame.functionality
+import pygame.font
 
 class Button():
 
@@ -8,7 +8,7 @@ class Button():
         self.screen_rect = screen.get_rect()
 
         #Set dimensions of button
-        self.width, self.height = 200, 50
+        self.width, self.height = 300, 50
         self.button_colour = (22, 160, 133)
         self.text_colour = (254, 254, 254)
         self.font = pygame.font.SysFont (None, 48)
@@ -29,5 +29,5 @@ class Button():
 
     def draw_button(self):
         #Draw blank button, then msg
-        self.screen.fill(self.button_colour, self.rect #draws rectangle
+        self.screen.fill(self.button_colour, self.rect) #draws rectangle
         self.screen.blit(self.msg_image, self.msg_image_rect) #draws text

@@ -21,8 +21,6 @@ def run_game():
 
     #Create instance to store game statistics
     stats = GameStats(ai_settings)
-
-
     mermaid = Mermaid(ai_settings, screen) #Make a mermaid
     fishes = Group() #Make fish
     bubbles = Group() #Make group to store bubbles in; groups behave like lists, but have extra functionality
@@ -40,6 +38,6 @@ def run_game():
             gf.update_bubbles(ai_settings, screen, mermaid, fishes, bubbles)
             gf.update_fishes(ai_settings, stats, screen, mermaid, fishes, bubbles)
 
-        gf.update_screen(ai_settings, screen, mermaid, fishes, bubbles, play_button)
+        gf.update_screen(ai_settings, screen, stats, mermaid, fishes, bubbles, play_button)
 
 run_game()
