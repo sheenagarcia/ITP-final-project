@@ -35,3 +35,7 @@ class Mermaid():
     def blitme(self):
         """Draw ship at its current location"""
         self.screen.blit(self.image, self.rect)
+
+    def center_mermaid(self):
+        """Center mermaid on screen"""
+        self.center = self.screen_rect.centerx

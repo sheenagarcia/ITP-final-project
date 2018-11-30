@@ -10,6 +10,7 @@ class Settings():
 
         #Mermaid Settings
         self.mermaid_speed_factor = 1.5
+        self.mermaid_limit = 3
 
         #Bubble Settings
         self.bubble_speed_factor = 3
