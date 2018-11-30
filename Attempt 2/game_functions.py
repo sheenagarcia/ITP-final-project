@@ -100,7 +100,7 @@ def update_screen(ai_settings, screen, mermaid, fishes, bubbles):
     #Make most recently drawn screen visible
     pygame.display.flip()
 
-def update_bubbles(fishes, bubbles):
+def update_bubbles(ai_settings, screen, mermaid, fishes, bubbles):
     """Update position of bubbles and get rid of old bubbles"""
         #Update bubble positions
     bubbles.update()
@@ -109,10 +109,23 @@ def update_bubbles(fishes, bubbles):
         if bubble.rect.bottom <= 0:
             bubbles.remove(bubble)
     #print(len(bubbles)) you can see the output in terminal
+    check_bubble_fish_collision(ai_settings, screen, mermaid, fishes, bubbles)
+
+def check_bubble_fish_collision(ai_settings, screen, mermaid, fishes, bubbles):
+    """Respond to bubble - fish collisions"""
     #Check for any bubbles that hit fish --> get rid of bubble + fish
     collisions = pygame.sprite.groupcollide(bubbles, fishes, True, True)
 
-def update_fishes(ai_settings, fishes):
+    if len(fishes) == 0:
+        #Destroy existing bubbles and create new school
+        bubbles.empty()
+        create_school(ai_settings, screen, mermaid, fishes)
+
+def update_fishes(ai_settings, mermaid, fishes):
     """Check if school is at edge, then update positions of all fishes in school"""
     check_school_edges(ai_settings, fishes)
     fishes.update()
+    #Look for fish-mermaid collisions
+    if pygame.sprite.spritecollideany(mermaid, fishes): #spritecollideany takes two arguments = sprite + group
+        print ("Magikarp uses splash!") #this looks for any member of group that collides with sprite; stops looking as soon as one collides
+        #no collisions, this code returns None and the if statement doesn't do anything
