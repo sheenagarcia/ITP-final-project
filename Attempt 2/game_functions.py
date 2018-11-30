@@ -100,7 +100,7 @@ def update_screen(ai_settings, screen, mermaid, fishes, bubbles):
     #Make most recently drawn screen visible
     pygame.display.flip()
 
-def update_bubbles(bubbles):
+def update_bubbles(fishes, bubbles):
     """Update position of bubbles and get rid of old bubbles"""
         #Update bubble positions
     bubbles.update()
@@ -109,6 +109,8 @@ def update_bubbles(bubbles):
         if bubble.rect.bottom <= 0:
             bubbles.remove(bubble)
     #print(len(bubbles)) you can see the output in terminal
+    #Check for any bubbles that hit fish --> get rid of bubble + fish
+    collisions = pygame.sprite.groupcollide(bubbles, fishes, True, True)
 
 def update_fishes(ai_settings, fishes):
     """Check if school is at edge, then update positions of all fishes in school"""
