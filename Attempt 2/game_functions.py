@@ -53,6 +53,15 @@ def change_school_direction(ai_settings, fishes):
         fish.rect.y += ai_settings.school_drop_speed
     ai_settings.school_direction *= -1
 
+def check_fishes_bottom(ai_settings, stats, screen, mermaid, fishes, bubbles):
+    """Check if any fish have reached the bottom of the screen"""
+    screen_rect = screen.get_rect()
+    for fish in fishes.sprites():
+        if fish.rect.bottom >= screen_rect.bottom:
+            #Treat it as if the mermaid got hit
+            mermaid_hit(ai_settings, stats, screen, mermaid, fishes, bubbles)
+            break
+
 def check_keydown_events(event, ai_settings, screen, mermaid, bubbles):
     """Respond to keypresses"""
     if event.key == pygame.K_RIGHT:
@@ -85,9 +94,17 @@ def check_events(ai_settings, screen, mermaid, bubbles):
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            check_keydown_events(event, ai_settings, screen, mermaid, bubbles)
+            check_keydown_events(event, ai_settings, stats, play_button, screen, mermaid, bubbles)
         elif event.type == pygame.KEYUP:
             check_keyup_events(event, mermaid)
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            check_play_button(stats, play_button, mouse_x, mouse_y)
+
+def check_play_button(stats, play_button, mouse_x, mouse_y):
+    """Start a new game when player clicks button"""
+    if play_button.rect.collidepoint(mouse_x, mouse_y): #restricts to mouse clicks on play button
+        stats.game_active = True
 
 def check_bubble_fish_collision(ai_settings, screen, mermaid, fishes, bubbles):
     """Respond to bubble - fish collisions"""
@@ -101,15 +118,19 @@ def check_bubble_fish_collision(ai_settings, screen, mermaid, fishes, bubbles):
 
 def mermaid_hit(ai_settings, stats, screen, mermaid, fishes, bubbles):
     """Respond to mermaid being hit by fish"""
-    stats.mermaids_left -= 1 #decrease number of mermaids by 1
-    #Empty groups of fish and bubbles
-    fishes.empty()
-    bubbles.empty()
-    #Create new school of fish + center mermaid
-    create_school(ai_settings, screen, mermaid, fishes)
-    mermaid.center_mermaid()
-    #pause
-    sleep(0.5)
+    if stats.mermaids_left > 0:
+        stats.mermaids_left -= 1 #decrease number of mermaids by 1
+        #Empty groups of fish and bubbles
+        fishes.empty()
+        bubbles.empty()
+        #Create new school of fish + center mermaid
+        create_school(ai_settings, screen, mermaid, fishes)
+        mermaid.center_mermaid()
+        #pause
+        sleep(0.5)
+
+    else:
+        stats.game_active = False
 
 def update_screen(ai_settings, screen, mermaid, fishes, bubbles):
     """Update images on screen and flip to new screen"""
@@ -120,6 +141,10 @@ def update_screen(ai_settings, screen, mermaid, fishes, bubbles):
         bubble.draw_bubble()
     mermaid.blitme()
     fishes.draw(screen) #using draw() on a group causes pygame to automatically draw each element in group to rect position
+
+    #Draw play button if game is inactive
+    if not stats.game_active:
+        play_button.draw_button()
 
     #Make most recently drawn screen visible
     pygame.display.flip()
@@ -144,3 +169,6 @@ def update_fishes(ai_settings, stats, screen, mermaid, fishes, bubbles):
         mermaid_hit(ai_settings, stats, screen, mermaid, fishes, bubbles)
         #print ("Magikarp uses splash!") #this looks for any member of group that collides with sprite; stops looking as soon as one collides
         #no collisions, this code returns None and the if statement doesn't do anything
+
+    #Look for fish reaching bottom of screen
+    check_fishes_bottom(ai_settings, stats, screen, mermaid, fishes, bubbles)
