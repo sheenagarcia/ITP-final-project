@@ -88,7 +88,7 @@ def check_keyup_events (event, mermaid):
         mermaid.moving_left = False
 
 
-def check_events(ai_settings, screen, stats, play_button, mermaid, bubbles):
+def check_events(ai_settings, screen, stats, play_button, mermaid, fishes, bubbles):
     """Respond to keypresses and mouse events"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -99,12 +99,23 @@ def check_events(ai_settings, screen, stats, play_button, mermaid, bubbles):
             check_keyup_events(event, mermaid)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            check_play_button(stats, play_button, mouse_x, mouse_y)
+            check_play_button(ai_settings, screen, stats, play_button, mermaid, fishes, bubbles, mouse_x, mouse_y)
 
-def check_play_button(stats, play_button, mouse_x, mouse_y):
+def check_play_button(ai_settings, screen, stats, play_button, mermaid, fishes, bubbles, mouse_x, mouse_y):
     """Start a new game when player clicks button"""
-    if play_button.rect.collidepoint(mouse_x, mouse_y): #restricts to mouse clicks on play button
+    button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y) #stores True / False value
+    if button_clicked and not stats.game_active: #restricts to mouse clicks on play button
+        pygame.mouse.set_visible(False) #hide mouse cursor
+        stats.reset_stats() #Reset game stats
         stats.game_active = True
+
+        #Empty list of fish and bubbles
+        fishes.empty()
+        bubbles.empty()
+
+        #Create new school and center mermaid
+        create_school(ai_settings, screen, mermaid, fishes)
+        mermaid.center_mermaid()
 
 def check_bubble_fish_collision(ai_settings, screen, mermaid, fishes, bubbles):
     """Respond to bubble - fish collisions"""
@@ -131,6 +142,7 @@ def mermaid_hit(ai_settings, stats, screen, mermaid, fishes, bubbles):
 
     else:
         stats.game_active = False
+        pygame.mouse.set_visible(True)
 
 def update_screen(ai_settings, screen, stats, mermaid, fishes, bubbles, play_button):
     """Update images on screen and flip to new screen"""
