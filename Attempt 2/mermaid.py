@@ -9,7 +9,7 @@ class Mermaid(Sprite):
         self.ai_settings = ai_settings
 
         #Load mermaid and get its recently
-        self.image = pygame.image.load('images/mermaid.bmp')
+        self.image = pygame.image.load('images/squirtle.bmp')
         self.rect = self.image.get_rect()
         self.screen_rect = screen.get_rect()
 

@@ -17,6 +17,10 @@ def run_game():
     screen = pygame.display.set_mode((ai_settings.screen_width, ai_settings.screen_height))
     pygame.display.set_caption("Shoot the Fish")
 
+    #Load and play music
+    pygame.mixer.music.load('theme_song_2.mid')
+    pygame.mixer.music.play()
+
     #Make play button
     play_button = Button(ai_settings, screen, "Shoot the Fish!")
 
@@ -29,7 +33,6 @@ def run_game():
 
     #Create school of fish
     gf.create_school(ai_settings, screen, mermaid, fishes)
-
 
     #Start main loop
     while True:
