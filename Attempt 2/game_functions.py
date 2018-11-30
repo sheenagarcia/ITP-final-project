@@ -118,10 +118,14 @@ def check_play_button(ai_settings, screen, stats, play_button, mermaid, fishes, 
         create_school(ai_settings, screen, mermaid, fishes)
         mermaid.center_mermaid()
 
-def check_bubble_fish_collision(ai_settings, screen, mermaid, fishes, bubbles):
+def check_bubble_fish_collision(ai_settings, screen, stats, sb, mermaid, fishes, bubbles):
     """Respond to bubble - fish collisions"""
     #Check for any bubbles that hit fish --> get rid of bubble + fish
     collisions = pygame.sprite.groupcollide(bubbles, fishes, True, True)
+    if collisions: #when bubble hits fish, pygame returns collision dictionary --> if dictionary exists, fish value added to score
+        for fishes in collisions.values():
+            stats.score += ai_settings.fish_points*len(fishes) #get points for EACH fish i.e. wide bullet hits multiple fishes; without this, you only get scored once since it is 1 collision event
+            sb.prep_score() #call prep score to update score
 
     if len(fishes) == 0:
         #Destroy existing bubbles and create new school
@@ -146,7 +150,7 @@ def mermaid_hit(ai_settings, stats, screen, mermaid, fishes, bubbles):
         stats.game_active = False
         pygame.mouse.set_visible(True)
 
-def update_screen(ai_settings, screen, stats, mermaid, fishes, bubbles, play_button):
+def update_screen(ai_settings, screen, stats, sb, mermaid, fishes, bubbles, play_button):
     """Update images on screen and flip to new screen"""
     #Redraw screen during each loop iteration
     screen.fill(ai_settings.bg_colour)
@@ -156,6 +160,9 @@ def update_screen(ai_settings, screen, stats, mermaid, fishes, bubbles, play_but
     mermaid.blitme()
     fishes.draw(screen) #using draw() on a group causes pygame to automatically draw each element in group to rect position
 
+    #Draw score information
+    sb.show_score()
+
     #Draw play button if game is inactive
     if not stats.game_active:
         play_button.draw_button()
@@ -163,7 +170,7 @@ def update_screen(ai_settings, screen, stats, mermaid, fishes, bubbles, play_but
     #Make most recently drawn screen visible
     pygame.display.flip()
 
-def update_bubbles(ai_settings, screen, mermaid, fishes, bubbles):
+def update_bubbles(ai_settings, screen, stats, sb, mermaid, fishes, bubbles):
     """Update position of bubbles and get rid of old bubbles"""
         #Update bubble positions
     bubbles.update()
@@ -172,7 +179,7 @@ def update_bubbles(ai_settings, screen, mermaid, fishes, bubbles):
         if bubble.rect.bottom <= 0:
             bubbles.remove(bubble)
     #print(len(bubbles)) you can see the output in terminal
-    check_bubble_fish_collision(ai_settings, screen, mermaid, fishes, bubbles)
+    check_bubble_fish_collision(ai_settings, screen, stats, sb, mermaid, fishes, bubbles)
 
 def update_fishes(ai_settings, stats, screen, mermaid, fishes, bubbles):
     """Check if school is at edge, then update positions of all fishes in school"""

@@ -4,6 +4,7 @@ from pygame.sprite import Group
 
 from settings import Settings
 from game_stats import GameStats
+from scoreboard import Scoreboard
 from button import Button
 from mermaid import Mermaid
 from fish import Fish
@@ -19,8 +20,9 @@ def run_game():
     #Make play button
     play_button = Button(ai_settings, screen, "Shoot the Fish!")
 
-    #Create instance to store game statistics
+    #Create instance to store game statistics + scoreboard
     stats = GameStats(ai_settings)
+    sb = Scoreboard(ai_settings, screen, stats)
     mermaid = Mermaid(ai_settings, screen) #Make a mermaid
     fishes = Group() #Make fish
     bubbles = Group() #Make group to store bubbles in; groups behave like lists, but have extra functionality
@@ -35,9 +37,9 @@ def run_game():
 
         if stats.game_active:
             mermaid.update()
-            gf.update_bubbles(ai_settings, screen, mermaid, fishes, bubbles)
+            gf.update_bubbles(ai_settings, screen, stats, sb, mermaid, fishes, bubbles)
             gf.update_fishes(ai_settings, stats, screen, mermaid, fishes, bubbles)
 
-        gf.update_screen(ai_settings, screen, stats, mermaid, fishes, bubbles, play_button)
+        gf.update_screen(ai_settings, screen, stats, sb, mermaid, fishes, bubbles, play_button)
 
 run_game()

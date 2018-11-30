@@ -22,6 +22,8 @@ class Settings():
 
         #How quickly game speeds up
         self.speedup_scale = 1.1
+        #How quickly fish point values increase
+        self.score_scale = 1.5
         self.initialize_dynamic_settings()
 
     def initialize_dynamic_settings(self):
@@ -31,10 +33,13 @@ class Settings():
         self.bubble_speed_factor = 3
         self.school_direction = 1 #1 = right, -1 = left
 
+        #scoring
+        self.fish_points = 50
+
     def increase_speed(self): #multiple each speed settings by value of speedup_scale (1.1)
         """Increase speed settings"""
         self.mermaid_speed_factor *= self.speedup_scale
         self.bubble_speed_factor *= self.speedup_scale
         self.fish_speed_factor *= self.speedup_scale
-
-        
+        #scoring
+        self.fish_points = int(self.fish_points * self.score_scale) #int to increase val by whole integers
