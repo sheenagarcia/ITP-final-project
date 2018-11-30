@@ -1,4 +1,7 @@
 import pygame.font #for text
+from pygame.sprite import Group
+
+from mermaid import Mermaid
 
 class Scoreboard():
     """A class to report scoring information"""
@@ -17,6 +20,16 @@ class Scoreboard():
         #Prepare initial score image
         self.prep_score()
         self.prep_level()
+        self.prep_mermaids()
+
+    def prep_mermaids(self):
+        """Show how many lives are left"""
+        self.mermaids = Group()
+        for mermaid_number in range (self.stats.mermaids_left):
+            mermaid = Mermaid(self.ai_settings, self.screen)
+            mermaid.rect.x = 10 + mermaid_number * mermaid.rect.width
+            mermaid.rect.y = 10
+            self.mermaids.add(mermaid)
 
     def prep_score(self):
         """Turn score into rendered image"""
@@ -42,3 +55,6 @@ class Scoreboard():
         """Draw score to the screen"""
         self.screen.blit(self.score_image, self.score_rect)
         self.screen.blit(self.level_image, self.level_rect)
+
+        #Draw mermaids
+        self.mermaids.draw(self.screen)

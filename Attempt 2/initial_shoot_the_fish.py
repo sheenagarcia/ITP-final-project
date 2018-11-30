@@ -38,7 +38,7 @@ def run_game():
         if stats.game_active:
             mermaid.update()
             gf.update_bubbles(ai_settings, screen, stats, sb, mermaid, fishes, bubbles)
-            gf.update_fishes(ai_settings, stats, screen, mermaid, fishes, bubbles)
+            gf.update_fishes(ai_settings, stats, screen, sb, mermaid, fishes, bubbles)
 
         gf.update_screen(ai_settings, screen, stats, sb, mermaid, fishes, bubbles, play_button)
 

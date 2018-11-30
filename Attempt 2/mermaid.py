@@ -1,8 +1,10 @@
 import pygame
+from pygame.sprite import Sprite
 
-class Mermaid():
+class Mermaid(Sprite):
     def __init__(self, ai_settings, screen):
         """Initialize mermaid and set its starting position"""
+        super(). __init__()
         self.screen = screen
         self.ai_settings = ai_settings
 

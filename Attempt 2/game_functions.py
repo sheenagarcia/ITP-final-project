@@ -53,13 +53,13 @@ def change_school_direction(ai_settings, fishes):
         fish.rect.y += ai_settings.school_drop_speed
     ai_settings.school_direction *= -1
 
-def check_fishes_bottom(ai_settings, stats, screen, mermaid, fishes, bubbles):
+def check_fishes_bottom(ai_settings, stats, screen, sb, mermaid, fishes, bubbles):
     """Check if any fish have reached the bottom of the screen"""
     screen_rect = screen.get_rect()
     for fish in fishes.sprites():
         if fish.rect.bottom >= screen_rect.bottom:
             #Treat it as if the mermaid got hit
-            mermaid_hit(ai_settings, stats, screen, mermaid, fishes, bubbles)
+            mermaid_hit(ai_settings, stats, screen, sb, mermaid, fishes, bubbles)
             break
 
 def check_keydown_events(event, ai_settings, screen, mermaid, bubbles):
@@ -115,6 +115,7 @@ def check_play_button(ai_settings, screen, stats, sb, play_button, mermaid, fish
         #Reset scoreboard images
         sb.prep_score()
         sb.prep_level()
+        sb.prep_mermaids()
 
         #Empty list of fish and bubbles
         fishes.empty()
@@ -143,10 +144,14 @@ def check_bubble_fish_collision(ai_settings, screen, stats, sb, mermaid, fishes,
         stats.level += 1
         sb.prep_level()
 
-def mermaid_hit(ai_settings, stats, screen, mermaid, fishes, bubbles):
+def mermaid_hit(ai_settings, stats, screen, sb, mermaid, fishes, bubbles):
     """Respond to mermaid being hit by fish"""
     if stats.mermaids_left > 0:
         stats.mermaids_left -= 1 #decrease number of mermaids by 1
+
+        #Update Scoreboard
+        sb.prep_mermaids()
+
         #Empty groups of fish and bubbles
         fishes.empty()
         bubbles.empty()
@@ -191,15 +196,15 @@ def update_bubbles(ai_settings, screen, stats, sb, mermaid, fishes, bubbles):
     #print(len(bubbles)) you can see the output in terminal
     check_bubble_fish_collision(ai_settings, screen, stats, sb, mermaid, fishes, bubbles)
 
-def update_fishes(ai_settings, stats, screen, mermaid, fishes, bubbles):
+def update_fishes(ai_settings, stats, screen, sb, mermaid, fishes, bubbles):
     """Check if school is at edge, then update positions of all fishes in school"""
     check_school_edges(ai_settings, fishes)
     fishes.update()
     #Look for fish-mermaid collisions
     if pygame.sprite.spritecollideany(mermaid, fishes): #spritecollideany takes two arguments = sprite + group
-        mermaid_hit(ai_settings, stats, screen, mermaid, fishes, bubbles)
+        mermaid_hit(ai_settings, stats, screen, sb, mermaid, fishes, bubbles)
         #print ("Magikarp uses splash!") #this looks for any member of group that collides with sprite; stops looking as soon as one collides
         #no collisions, this code returns None and the if statement doesn't do anything
 
     #Look for fish reaching bottom of screen
-    check_fishes_bottom(ai_settings, stats, screen, mermaid, fishes, bubbles)
+    check_fishes_bottom(ai_settings, stats, screen, sb, mermaid, fishes, bubbles)
