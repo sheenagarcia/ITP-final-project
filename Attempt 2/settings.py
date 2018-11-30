@@ -17,3 +17,8 @@ class Settings():
         self.bubble_height = 10
         self.bubble_colour = 46, 134, 193
         self.bubbles_allowed = 3
+
+        #Fish Settings
+        self.fish_speed_factor = 1
+        self.school_drop_speed = 10 #controls how fast fish drop
+        self.school_direction = 1 #1 = right, -1 = left

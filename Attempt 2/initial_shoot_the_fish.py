@@ -28,7 +28,7 @@ def run_game():
         gf.check_events(ai_settings, screen, mermaid, bubbles)
         mermaid.update()
         gf.update_bubbles(bubbles)
-        bubbles.update()
+        gf.update_fishes(ai_settings, fishes)
         gf.update_screen(ai_settings, screen, mermaid, fishes, bubbles)
 
 run_game()

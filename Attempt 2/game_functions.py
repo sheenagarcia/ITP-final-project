@@ -38,7 +38,18 @@ def create_school(ai_settings, screen, mermaid, fishes):
         for fish_number in range(number_fishes_x):
             create_fish(ai_settings, screen, fishes, fish_number, row_number)
 
+def check_school_edges(ai_settings, fishes):
+    """Respond if fish reach edge"""
+    for fish in fishes.sprites():
+        if fish.check_edges():
+            change_school_direction(ai_settings, fishes)
+            break
 
+def change_school_direction(ai_settings, fishes):
+    """Drop fish and change fish direction"""
+    for fish in fishes.sprites():
+        fish.rect.y += ai_settings.school_drop_speed
+    ai_settings.school_direction *= -1
 
 def check_keydown_events(event, ai_settings, screen, mermaid, bubbles):
     """Respond to keypresses"""
@@ -98,3 +109,8 @@ def update_bubbles(bubbles):
         if bubble.rect.bottom <= 0:
             bubbles.remove(bubble)
     #print(len(bubbles)) you can see the output in terminal
+
+def update_fishes(ai_settings, fishes):
+    """Check if school is at edge, then update positions of all fishes in school"""
+    check_school_edges(ai_settings, fishes)
+    fishes.update()
